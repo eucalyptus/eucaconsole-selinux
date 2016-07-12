@@ -1,0 +1,109 @@
+# Copyright (c) 2016 Hewlett Packard Enterprise Development LP
+#
+# Permission to use, copy, modify, and/or distribute this software for
+# any purpose with or without fee is hereby granted, provided that the
+# above copyright notice and this permission notice appear in all copies.
+#
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+# ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+# ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT
+# OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+policy_module(eucaconsole, 0.1.0)
+
+gen_require(`
+    type tmp_t;
+')
+
+########################################
+#
+# Declarations
+#
+
+type eucaconsole_t;
+type eucaconsole_exec_t;
+init_daemon_domain(eucaconsole_t, eucaconsole_exec_t)
+
+type eucaconsole_initrc_exec_t;
+init_script_file(eucaconsole_initrc_exec_t)
+
+type eucaconsole_unit_file_t;
+systemd_unit_file(eucaconsole_unit_file_t)
+
+type eucaconsole_conf_t;
+files_config_file(eucaconsole_conf_t)
+
+type eucaconsole_log_t;
+logging_log_file(eucaconsole_log_t)
+
+type eucaconsole_tmp_t;
+files_tmp_file(eucaconsole_tmp_t)
+
+type eucaconsole_var_run_t;
+files_pid_file(eucaconsole_var_run_t)
+
+########################################
+#
+# Local policy
+#
+
+allow eucaconsole_t self:capability setuid;
+
+#allow eucalyptus_cloud_t self:capability { chown fowner kill net_raw setgid setuid sys_resource };
+#allow eucalyptus_cloud_t self:capability { dac_override dac_read_search };  # log files written as root
+#dontaudit eucalyptus_cloud_t self:capability fsetid;
+#
+#allow eucalyptus_cloud_t self:process { execmem setcap setpgid setrlimit };  # execmem is for java
+
+allow eucaconsole_t self:tcp_socket create_stream_socket_perms;
+allow eucaconsole_t self:unix_stream_socket connectto;  # memcached
+
+read_files_pattern(eucaconsole_t, eucaconsole_conf_t, eucaconsole_conf_t)
+
+append_files_pattern(eucaconsole_t, var_log_t, eucaconsole_log_t)
+logging_log_filetrans(eucaconsole_t, eucaconsole_log_t, file)
+
+manage_files_pattern(eucaconsole_t, tmp_t, eucaconsole_tmp_t)
+files_tmp_filetrans(eucaconsole_t, eucaconsole_tmp_t, file)
+
+manage_files_pattern(eucaconsole_t, eucaconsole_var_run_t, eucaconsole_var_run_t)
+files_pid_filetrans(eucaconsole_t, eucaconsole_var_run_t, file)
+
+kernel_dontaudit_read_system_state(eucaconsole_t)  # /proc/meminfo
+
+corecmd_exec_bin(eucaconsole_t)
+
+corenet_tcp_bind_generic_node(eucaconsole_t)
+corenet_tcp_bind_generic_port(eucaconsole_t)  # port 8888
+corenet_tcp_connect_generic_port(eucaconsole_t)  # port 8773
+corenet_tcp_connect_memcache_port(eucaconsole_t)
+
+dev_read_urand(eucaconsole_t)
+
+auth_read_passwd(eucaconsole_t)
+
+libs_exec_ldconfig(eucaconsole_t)
+
+sysnet_dns_name_resolve(eucaconsole_t)
+
+optional_policy(`
+    gen_require(`
+        type httpd_t;
+        type httpd_var_run_t;
+    ')
+
+    search_dirs_pattern(httpd_t, eucaconsole_conf_t, eucaconsole_conf_t)
+    manage_files_pattern(httpd_t, eucaconsole_var_run_t, httpd_var_run_t)
+    filetrans_pattern(httpd_t, eucaconsole_var_run_t, httpd_var_run_t, file)
+')
+
+optional_policy(`
+    manage_files_pattern(memcached_t, eucaconsole_var_run_t, memcached_var_run_t)
+    manage_sock_files_pattern(memcached_t, eucaconsole_var_run_t, memcached_var_run_t)
+    filetrans_pattern(memcached_t, eucaconsole_var_run_t, memcached_var_run_t, { file sock_file })
+
+    memcached_stream_connect(eucaconsole_t)
+')

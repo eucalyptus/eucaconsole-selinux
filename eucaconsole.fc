@@ -1,0 +1,28 @@
+# Copyright (c) 2016 Hewlett Packard Enterprise Development LP
+#
+# Permission to use, copy, modify, and/or distribute this software for
+# any purpose with or without fee is hereby granted, provided that the
+# above copyright notice and this permission notice appear in all copies.
+#
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+# ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+# ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT
+# OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+/etc/eucaconsole(/.*)?                         gen_context(system_u:object_r:eucaconsole_conf_t,s0)
+/etc/eucaconsole/console.crt                -- gen_context(system_u:object_r:cert_t,s0)
+/etc/eucaconsole/console.key                -- gen_context(system_u:object_r:cert_t,s0)
+/etc/eucaconsole/nginx.conf                 -- gen_context(system_u:object_r:httpd_config_t,s0)
+/etc/rc.d/init.d/eucaconsole                -- gen_context(system_u:object_r:eucaconsole_initrc_exec_t,s0)
+/etc/sysconfig/eucaconsole                  -- gen_context(system_u:object_r:eucaconsole_conf_t,s0)
+/usr/bin/eucaconsole                        -- gen_context(system_u:object_r:eucaconsole_exec_t,s0)
+/usr/lib/systemd/system/eucaconsole.service -- gen_context(system_u:object_r:eucaconsole_unit_file_t,s0)
+/var/log/eucaconsole.log                    -- gen_context(system_u:object_r:eucaconsole_log_t,s0)
+/var/log/eucaconsole_startup.log            -- gen_context(system_u:object_r:eucaconsole_log_t,s0)
+/var/run/eucaconsole(/.*)?                     gen_context(system_u:object_r:eucaconsole_var_run_t,s0)
+/var/run/eucaconsole/memcached.pid          -- gen_context(system_u:object_r:memcached_var_run_t,s0)
+/var/run/eucaconsole/memcached.sock         -s gen_context(system_u:object_r:memcached_var_run_t,s0)
+/var/run/eucaconsole/nginx.pid              -- gen_context(system_u:object_r:httpd_var_run_t,s0)
