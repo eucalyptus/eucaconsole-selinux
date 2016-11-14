@@ -1,7 +1,5 @@
-%global selinux_variants mls targeted
-
 Name:           eucaconsole-selinux
-Version:        0.1.0
+Version:        0.1.1
 Release:        1%{?dist}
 Summary:        SELinux policy for eucaconsole
 
@@ -29,44 +27,35 @@ for eucaconsole.
 
 
 %build
-for variant in %{selinux_variants}; do
-    make NAME=${variant}
-    mv eucaconsole.pp eucaconsole.pp.${variant}
-    make NAME=${variant} clean
-done
+make
 
 
 %install
-for variant in %{selinux_variants}; do
-    mkdir -p $RPM_BUILD_ROOT%{_datadir}/selinux/${variant}
-    install -p -m 0644 eucaconsole.pp.${variant} $RPM_BUILD_ROOT%{_datadir}/selinux/${variant}/eucaconsole.pp
-done
-mkdir -p $RPM_BUILD_ROOT%{_datadir}/selinux/devel/include/contrib
-install -p -m 0644 eucaconsole.if $RPM_BUILD_ROOT%{_datadir}/selinux/devel/include/contrib/eucaconsole.if
+install -Dp -m 0644 eucaconsole.if $RPM_BUILD_ROOT%{_datadir}/selinux/devel/include/contrib/eucaconsole.if
+install -Dp -m 0644 eucaconsole.pp $RPM_BUILD_ROOT%{_datadir}/selinux/packages/eucaconsole.pp
 
 
 %files
 %license COPYING
 %{_datadir}/selinux/devel/include/contrib/eucaconsole.if
-%{_datadir}/selinux/*/eucaconsole.pp
+%{_datadir}/selinux/packages/eucaconsole.pp
 
 
 %post
 if /usr/sbin/selinuxenabled; then
-    for variant in %{selinux_variants}; do
-        /usr/sbin/semodule -s ${variant} -i %{_datadir}/selinux/${variant}/eucaconsole.pp >/dev/null || :
-    done
+    /usr/sbin/semodule -i %{_datadir}/selinux/packages/eucaconsole.pp >/dev/null || :
 fi
 
 
 %postun
 if [ $1 -eq 0 ] && /usr/sbin/selinuxenabled; then
-    for variant in %{selinux_variants}; do
-        /usr/sbin/semodule -s ${variant} -r eucaconsole >/dev/null || :
-    done
+    /usr/sbin/semodule -r eucaconsole >/dev/null || :
 fi
 
 
 %changelog
+* Wed Oct 26 2016 Garrett Holmstrom <gholms@hpe.com> - 0.1.1-1
+- Moved policy to /usr/share/selinux/packages
+
 * Tue Jul 12 2016 Garrett Holmstrom <gholms@hpe.com> - 0.1.0-1
 - Created
