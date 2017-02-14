@@ -1,5 +1,5 @@
 Name:           eucaconsole-selinux
-Version:        0.1.1
+Version:        0.1.2
 Release:        1%{?dist}
 Summary:        SELinux policy for eucaconsole
 
@@ -54,6 +54,9 @@ fi
 
 
 %changelog
+* Tue Feb 14 2017 Garrett Holmstrom <gholms@fedoraproject.org> - 0.1.2-1
+- Version bump (0.1.2)
+
 * Wed Oct 26 2016 Garrett Holmstrom <gholms@hpe.com> - 0.1.1-1
 - Moved policy to /usr/share/selinux/packages
 

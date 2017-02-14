@@ -1,4 +1,4 @@
-# Copyright (c) 2016 Hewlett Packard Enterprise Development LP
+# Copyright (c) 2016-2017 Hewlett Packard Enterprise Development LP
 #
 # Permission to use, copy, modify, and/or distribute this software for
 # any purpose with or without fee is hereby granted, provided that the
@@ -12,7 +12,7 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT
 # OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-policy_module(eucaconsole, 0.1.1)
+policy_module(eucaconsole, 0.1.2)
 
 gen_require(`
     type tmp_t;
