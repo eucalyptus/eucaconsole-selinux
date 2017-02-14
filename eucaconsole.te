@@ -63,6 +63,7 @@ manage_files_pattern(eucaconsole_t, tmp_t, eucaconsole_tmp_t)
 files_tmp_filetrans(eucaconsole_t, eucaconsole_tmp_t, file)
 
 manage_files_pattern(eucaconsole_t, eucaconsole_var_run_t, eucaconsole_var_run_t)
+create_dirs_pattern(eucaconsole_t, eucaconsole_var_run_t, eucaconsole_var_run_t)  # /var/run/eucaconsole/.matplotlib/
 files_pid_filetrans(eucaconsole_t, eucaconsole_var_run_t, file)
 
 kernel_dontaudit_read_system_state(eucaconsole_t)  # /proc/meminfo
