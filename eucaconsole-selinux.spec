@@ -1,5 +1,5 @@
 Name:           eucaconsole-selinux
-Version:        0.1.2
+Version:        0.1.3
 Release:        1%{?dist}
 Summary:        SELinux policy for eucaconsole
 
@@ -54,7 +54,10 @@ fi
 
 
 %changelog
-* Tue Feb 14 2017 Garrett Holmstrom <gholms@fedoraproject.org> - 0.1.2-1
+* Tue Jun 13 2017 Garrett Holmstrom <gholms@dxc.com> - 0.1.3-1
+- Version bump (0.1.3)
+
+* Tue Feb 14 2017 Garrett Holmstrom <gholms@hpe.com> - 0.1.2-1
 - Version bump (0.1.2)
 
 * Wed Oct 26 2016 Garrett Holmstrom <gholms@hpe.com> - 0.1.1-1
