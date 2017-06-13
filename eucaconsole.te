@@ -1,4 +1,4 @@
-# Copyright (c) 2016-2017 Hewlett Packard Enterprise Development LP
+# Copyright (c) 2016-2017 Ent. Services Development Corporation LP
 #
 # Permission to use, copy, modify, and/or distribute this software for
 # any purpose with or without fee is hereby granted, provided that the
@@ -73,7 +73,7 @@ corecmd_exec_bin(eucaconsole_t)
 corenet_tcp_bind_generic_node(eucaconsole_t)
 corenet_tcp_bind_generic_port(eucaconsole_t)  # port 8888
 corenet_tcp_connect_generic_port(eucaconsole_t)  # port 8773
-corenet_tcp_connect_http_port(eucaconsole_t)  # port 443 login to AWS (GUI-2920)
+corenet_tcp_connect_http_port(eucaconsole_t)  # AWS runs on port 443 (GUI-2920)
 corenet_tcp_connect_memcache_port(eucaconsole_t)
 
 dev_read_urand(eucaconsole_t)
